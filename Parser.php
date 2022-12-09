@@ -59,7 +59,8 @@ class Parser
         foreach ($realRooms as $row) {
             // Explode to individual characters
             $exploded = str_split($row[0]);
-            foreach ($exploded as $key => $character) {
+            $res = [];
+            foreach ($exploded as $character) {
                 // Get the numerical representation of the character
                 $char = ord($character);
 
@@ -77,9 +78,9 @@ class Parser
                     }
                 }
                 // Insert the character back into the place where we got it
-                $exploded[$key] = chr($char);
+                $res[] = chr($char);
             }
-            $string = implode($exploded);
+            $string = implode($res);
             // If the string contains the word north it is the string we are looking for
             if (str_contains($string, "north")) {
                 return array("Name" => $string, "Roomnumber" => $row[1]);
