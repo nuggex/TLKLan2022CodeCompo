@@ -4,4 +4,4 @@ require_once "Parser.php";
 
 $Parser = new Parser();
 
-$Parser->part2();
+$Parser->run();
