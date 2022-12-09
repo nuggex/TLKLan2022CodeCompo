@@ -3,19 +3,18 @@
 
 class Parser
 {
-    private $file;
-    private $filename;
-    private $sumOfRooms;
-    private $returnRooms;
+    private array $file;
+    private string $filename;
+    private int $sumOfRooms;
+    private array $returnRooms;
 
-    public function __construct()
+    function __construct()
     {
         $this->filename = dirname(__FILE__) . "/i.txt";
         $this->file = file($this->filename, FILE_IGNORE_NEW_LINES);
-
     }
 
-    public function part1()
+    public function part1(): array
     {
         $realRoomNumbers = array();
         $returnRooms = array();
@@ -33,23 +32,22 @@ class Parser
             // Sort unique array first by keys and then by values reversed
             ksort($unique);
             arsort($unique);
-            // Get keys from unique array
-            $keys = array_keys($unique);
             // Get room number from string by replaceing all non digit characters
             $roomNumber = preg_replace('/\D/', '', $split[0]);
             // if keys of top 5 items in unique after sorting is equal to split then it is a real room
-            $checkString = $keys[0] . $keys[1] . $keys[2] . $keys[3] . $keys[4];
+            $checkString = implode(array_slice(array_keys($unique), 0, 5));
             if (str_contains($split[1], $checkString)) {
                 $realRoomNumbers[] = $roomNumber;
                 $returnRooms[] = array($split[0], $roomNumber);
             }
         }
+        // Set sum of rooms and returnRooms to be used in Part 2
         $this->sumOfRooms = array_sum($realRoomNumbers);
         $this->returnRooms = $returnRooms;
         return $returnRooms;
     }
 
-    public function part2()
+    public function part2(): bool|array
     {
         // Check if realRooms is set in instance
         if (!$realRooms = $this->returnRooms) {
@@ -72,7 +70,7 @@ class Parser
                     // calculate the offset for the character with modulo
                     $mod = $row[1] % 26;
                     $char = $char + $mod;
-                    // If the resulting character is above 26 we need to offset it to be in the span 97-122 (a-z)
+                    // If the resulting character is above 122 we need to offset it to be in the span 97-122 (a-z)
                     if ($char > 122) {
                         $char = $char - 26;
                     }
