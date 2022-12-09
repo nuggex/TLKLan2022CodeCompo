@@ -18,7 +18,7 @@ Part 2 is run with existing data for a more accurate approximation of the perfor
 
 | iter | benchmark   | subject    | set | revs  | mem_peak   | time_avg    | comp_z_value | comp_deviation |
 |------|-------------|------------|-----|-------|------------|-------------|--------------|----------------|
-| 0    | ParserBench | benchPart1 |     | 10000 | 1,292,416b | 6,005.452μs | 0.00σ        | 0.00%          |
-| 0    | ParserBench | benchPart2 |     | 10000 | 940,952b   | 1,604.509μs | 0.00σ        | 0.00%          |
+| 0    | ParserBench | benchPart1 |     | 10000 | 1,292,416b | 6,009.641μs | 0.00σ        | 0.00%          |
+| 0    | ParserBench | benchPart2 |     | 10000 | 940,952b   | 1,390.457μs | 0.00σ        | 0.00%          |
 
 ![image](https://user-images.githubusercontent.com/30026633/206765449-30a7f5bd-49f8-4ca3-9687-73ef1fc4cb6e.png)
