@@ -6,12 +6,14 @@ class Parser
     private array $file;
     private string $filename;
     private int $sumOfRooms;
-    private array $returnRooms;
+    private array|false $returnRooms;
 
     function __construct()
     {
         $this->filename = dirname(__FILE__) . "/i.txt";
         $this->file = file($this->filename, FILE_IGNORE_NEW_LINES);
+        $this->sumOfRooms = 0;
+        $this->returnRooms = [];
     }
 
     public function part1(): array
@@ -24,6 +26,7 @@ class Parser
             $split = explode("[", $row);
             $unique = array_fill_keys(array_unique(str_split(preg_replace('~[^\p{M}\p{L}]+~u', '', $split[0]))), "0");
             $replace = preg_replace('~[^\p{M}\p{L}]+~u', '', $split[0]);
+
             // Count characters in string and set counts in unique array
             foreach (count_chars($replace, 1) as $i => $val) {
                 $unique[chr($i)] = $val;
@@ -32,17 +35,19 @@ class Parser
             // Sort unique array first by keys and then by values reversed
             ksort($unique);
             arsort($unique);
+
             // Get room number from string by replaceing all non digit characters
             $roomNumber = preg_replace('/\D/', '', $split[0]);
+
             // if keys of top 5 items in unique after sorting is equal to split then it is a real room
             $checkString = implode(array_slice(array_keys($unique), 0, 5));
             if (str_contains($split[1], $checkString)) {
-                $realRoomNumbers[] = $roomNumber;
+                $this->sumOfRooms += $roomNumber;
                 $returnRooms[] = array($split[0], $roomNumber);
             }
         }
         // Set sum of rooms and returnRooms to be used in Part 2
-        $this->sumOfRooms = array_sum($realRoomNumbers);
+
         $this->returnRooms = $returnRooms;
         return $returnRooms;
     }
@@ -50,14 +55,16 @@ class Parser
     public function part2(): bool|array
     {
         // Check if realRooms is set in instance
-        if (!$realRooms = $this->returnRooms) {
+        if (empty($realRooms = $this->returnRooms)) {
             $realRooms = $this->part1();
         }
+
         // loop through the items
         foreach ($realRooms as $row) {
             // Explode to individual characters
             $exploded = str_split($row[0]);
-            $res = [];
+            $result = [];
+
             foreach ($exploded as $character) {
                 // Get the numerical representation of the character
                 $char = ord($character);
@@ -76,9 +83,9 @@ class Parser
                     }
                 }
                 // Insert the character back into the place where we got it
-                $res[] = chr($char);
+                $result[] = chr($char);
             }
-            $string = implode($res);
+            $string = implode($result);
             // If the string contains the word north it is the string we are looking for
             if (str_contains($string, "north")) {
                 return array("Name" => $string, "Roomnumber" => $row[1]);
@@ -91,6 +98,7 @@ class Parser
     {
         $this->part1();
         print_r("Sum of real rooms: " . $this->sumOfRooms . "\n");
-        var_dump($this->part2());
+        $part2 = $this->part2();
+        print_r($part2["Name"]);
     }
 }
