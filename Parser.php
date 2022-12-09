@@ -6,6 +6,7 @@ class Parser
     private $file;
     private $filename;
     private $sumOfRooms;
+    private $returnRooms;
 
     public function __construct()
     {
@@ -44,12 +45,15 @@ class Parser
             }
         }
         $this->sumOfRooms = array_sum($realRoomNumbers);
+        $this->returnRooms = $returnRooms;
         return $returnRooms;
     }
 
     public function part2()
     {
-        $realRooms = $this->part1();
+        if (!$realRooms = $this->returnRooms) {
+            $realRooms = $this->part1();
+        }
         foreach ($realRooms as $row) {
             $exploded = str_split($row[0]);
             foreach ($exploded as $key => $character) {
