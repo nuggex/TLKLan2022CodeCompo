@@ -51,25 +51,36 @@ class Parser
 
     public function part2()
     {
+        // Check if realRooms is set in instance
         if (!$realRooms = $this->returnRooms) {
             $realRooms = $this->part1();
         }
+        // loop through the items
         foreach ($realRooms as $row) {
+            // Explode to individual characters
             $exploded = str_split($row[0]);
             foreach ($exploded as $key => $character) {
+                // Get the numerical representation of the character
                 $char = ord($character);
+
+                // If the ord for the character is 45 it is "-" and should be replaced with " "
                 if ($char === 45) {
                     $char = 32;
+                    // If the character is between or equal to 122 and 97 it is a character we should translate
                 } elseif ($char <= 122 && $char >= 97) {
+                    // calculate the offset for the character with modulo
                     $mod = $row[1] % 26;
                     $char = $char + $mod;
+                    // If the resulting character is above 26 we need to offset it to be in the span 97-122 (a-z)
                     if ($char > 122) {
                         $char = $char - 26;
                     }
                 }
+                // Insert the character back into the place where we got it
                 $exploded[$key] = chr($char);
             }
             $string = implode($exploded);
+            // If the string contains the word north it is the string we are looking for
             if (str_contains($string, "north")) {
                 return array("Name" => $string, "Roomnumber" => $row[1]);
             }
